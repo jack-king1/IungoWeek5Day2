@@ -25,7 +25,7 @@ function ProfileInfo(props) {
                 <div className="h-full flex">
                     <div className="p-4 flex my-auto">
                         <Button
-                            id={props.id}
+                            lineID={props.lineID}
                             action={props.action}
                             text="Add Friend"
                         />

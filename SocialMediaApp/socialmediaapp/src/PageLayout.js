@@ -12,7 +12,8 @@ function PageLayout() {
     async function GetUsers() {
         let users = await fetchAllUsers();
         console.log("Fetched Users: ", users.users);
-        setUsers(users.users);
+        let shuffled = users.users.sort(() => Math.random() - 0.5);
+        setUsers(shuffled);
     }
 
     useEffect(() => {
@@ -24,8 +25,8 @@ function PageLayout() {
     }, [users]);
 
     const AddFriendRequest = (reqID) => {
-        console.log(users[0]);
-        setFriendRequests([...friendRequests, users[reqID - 1]]);
+        console.log(reqID);
+        setFriendRequests([...friendRequests, users[reqID]]);
     };
 
     return (
@@ -36,9 +37,11 @@ function PageLayout() {
                     <div className="grid grid-cols-5">
                         <div className="col-span-4 grid grid-col-3">
                             {users.map((user, index) => {
+                                console.log("Key: ", index);
                                 return (
                                     <ProfileInfo
                                         key={index}
+                                        lineID={index}
                                         id={user.id}
                                         firstName={user.firstName}
                                         lastName={user.lastName}
@@ -60,6 +63,7 @@ function PageLayout() {
                                     {friendRequests.map((user, index) => {
                                         return (
                                             <FriendRequest
+                                                key={index}
                                                 firstName={user.firstName}
                                                 lastName={user.lastName}
                                                 username={user.username}
