@@ -1,0 +1,25 @@
+* {
+    box-sizing: border-box;
+}
+
+.colourbtn {
+    width: 20vh;
+    height: 20vh;
+    font-size: small;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.colourbtn > p {
+    flex: 1;
+}
+
+.colourbtn:hover {
+    cursor: pointer;
+}
+
+.hover:hover {
+    background-color: #f00;
+}
