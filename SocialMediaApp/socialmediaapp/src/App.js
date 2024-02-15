@@ -4,7 +4,7 @@ import logo from "./logo.svg";
 
 function App() {
     return (
-        <div className="bg-black text-white">
+        <div className="bg-cyan-600 text-white">
             <PageLayout />
         </div>
     );

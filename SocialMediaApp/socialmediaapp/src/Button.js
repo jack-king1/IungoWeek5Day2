@@ -1,15 +1,34 @@
 import React from "react";
-import { FaUserPlus } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaUserPlus, FaArrowRight } from "react-icons/fa";
 
 function Button(props) {
+    const [toggle, setToggle] = useState(false);
+
+    const HandleClick = () => {
+        if (toggle) {
+            console.log("My Props: ", props);
+            props.unaction(props.id);
+        } else {
+            props.action(props.lineID);
+        }
+        setToggle(!toggle);
+    };
+
     return (
         <div
-            onClick={() => props.action(props.lineID)}
-            className="w-20 h-20 bg-green-600 flex justify-center text-center rounded-3xl hover:cursor-pointer"
+            onClick={() => HandleClick()}
+            className={`w-20 h-full ${
+                toggle ? "bg-red-600" : "bg-green-600"
+            }  flex justify-center text-center rounded-r-3xl hover:cursor-pointer`}
         >
-            <div className="m-auto">
-                <FaUserPlus className="text-3xl" />
-            </div>
+            {toggle ? (
+                <FaArrowRight className="m-auto" />
+            ) : (
+                <div className="m-auto">
+                    <FaUserPlus className="text-3xl" />
+                </div>
+            )}
         </div>
     );
 }

@@ -3,16 +3,18 @@ import Button from "./Button";
 
 function ProfileInfo(props) {
     return (
-        <div className="h-44 bg-cyan-600 span-col-1 flex p-4 m-2 rounded-3xl w-2/3 mx-auto drop-shadow-xl align-middle">
-            <div className="flex flex-row align-middle w-full bg-white rounded-3xl">
-                <div className="flex items-center h-full rounded-3xl bg-white w-1/6">
-                    <img
-                        src={props.image}
-                        className="h-auto mx-auto max-w-full w-24 h-24"
-                        alt="..."
-                    />
+        <div className="h-44 bg-cyan-600 span-col-1 flex p-4 w-full mx-auto align-middle ">
+            <div className="flex flex-row align-middle bg-white rounded-3xl w-3/4 mx-auto shadow-md">
+                <div className="flex items-center h-full rounded-3xl bg-white">
+                    <div className="bg-cyan-600 rounded-full p-7 -translate-x-1/4 shadow-md">
+                        <img
+                            src={props.image}
+                            className="h-auto mx-auto max-w-full w-24 h-24"
+                            alt="..."
+                        />
+                    </div>
                 </div>
-                <div className="text-black h-full text-xl flex flex-col my-auto justify-around w-full">
+                <div className="text-black h-full text-xl flex flex-col my-auto justify-around flex-1">
                     <div className="font-bold">
                         {props.firstName} {props.lastName}
                     </div>
@@ -23,10 +25,12 @@ function ProfileInfo(props) {
                     <div className="text-sm">Email: {props.email}</div>
                 </div>
                 <div className="h-full flex">
-                    <div className="p-4 flex my-auto">
+                    <div className="h-full flex my-auto">
                         <Button
+                            id={props.id}
                             lineID={props.lineID}
                             action={props.action}
+                            unaction={props.unaction}
                             text="Add Friend"
                         />
                     </div>
