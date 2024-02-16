@@ -1,24 +1,13 @@
 import React from "react";
-import Header from "./Header";
+import Header from "../Header";
 import { useEffect, useState, useContext } from "react";
-import ProfileInfo from "./ProfileInfo";
-import { fetchAllUsers } from "./AllUsersAPI";
-import FriendRequest from "./FriendRequest";
+import ProfileInfo from "../Components/ProfileInfo";
+import { fetchAllUsers } from "../API/AllUsersAPI";
+import FriendRequest from "../Components/FriendRequest";
 
 function PageLayout() {
     const [users, setUsers] = useState([]);
     const [friendRequests, setFriendRequests] = useState([]);
-
-    async function GetUsers() {
-        let users = await fetchAllUsers();
-        console.log("Fetched Users: ", users.users);
-        let shuffled = users.users.sort(() => Math.random() - 0.5);
-        setUsers(shuffled);
-    }
-
-    useEffect(() => {
-        GetUsers();
-    }, []);
 
     useEffect(() => {
         console.log("user Effect Users: ", users);

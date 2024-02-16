@@ -1,6 +1,5 @@
-import Header from "./Header";
-import PageLayout from "./PageLayout";
-import logo from "./logo.svg";
+import PageLayout from "./Layout/PageLayout";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 
 function App() {
     return (
