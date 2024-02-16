@@ -67,7 +67,10 @@ function QuestionContainer(props) {
     }
 
     function replaceEntity(string) {
-        let newString = string.replace(/^&#039;|&#039;$|&quot;/g, "");
+        let newString = string.replace(
+            /^&#039;|&#039;$|&quot;|&#039;|&#039/g,
+            ""
+        );
         return newString;
     }
 
