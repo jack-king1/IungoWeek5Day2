@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { TriviaContext } from "../TriviaContexts";
+import AnswerBtn from "./AnswerBtn";
 
 function QuestionContainer(props) {
     const triviaContext = useContext(TriviaContext);
@@ -8,23 +9,26 @@ function QuestionContainer(props) {
     const [baseTrivia, setBaseTrivia] = useState(null);
     const [possibleAnswers, setPossibleAnswers] = useState([]);
 
+    const colours = ["green", "red", "blue", "yellow"];
+
+    //setup answers once context has loaded api
     useEffect(() => {
         console.log("Had Loaded: ", triviaContext.loaded);
         if (triviaContext.loaded) {
             console.log("Trivia has been loaded!");
             SetPossibleAnswers();
-        } else {
-            return;
+        }
+
+        if (triviaContext.reloaded) {
+            console.log("fetching new questioms...");
+            SetPossibleAnswers();
         }
     }, [triviaContext]);
 
+    //on count reset, get new answers to questions
     useEffect(() => {
         SetPossibleAnswers();
     }, [questionCount]);
-
-    function ResetQuiz() {
-        setStartQuiz(false);
-    }
 
     function StartQuiz() {
         setStartQuiz(true);
@@ -34,7 +38,7 @@ function QuestionContainer(props) {
         return (
             <div className="flex justify-center items-center flex-col gap-10">
                 <div className="text-6xl font-kanit">
-                    Welcome, Press 'Start' to play!
+                    Welcome To Trivia Night!
                 </div>
                 <button
                     onClick={StartQuiz}
@@ -42,6 +46,9 @@ function QuestionContainer(props) {
                 >
                     Start Game
                 </button>
+                <button className="font-kanit bg-red-500 hover:bg-blue-400  border-red-700 hover:border-red-500 rounded"></button>
+                <button className=" bg-green-500 hover:bg-green-400 border-green-700 hover:border-green-500"></button>
+                <button className=" bg-yellow-500 hover:bg-yellow-400  border-yellow-700 hover:border-yellow-500"></button>
             </div>
         );
     }
@@ -71,41 +78,54 @@ function QuestionContainer(props) {
             /^&#039;|&#039;$|&quot;|&#039;|&#039/g,
             ""
         );
-        return newString;
+        let newString2 = newString.replace("&eacute;", "e");
+        return newString2;
     }
 
     function AnswerSelected(selectedAnswer) {
+        //Check if answer was correct
         if (
             selectedAnswer ==
             triviaContext.trivia.results[questionCount].correct_answer
         ) {
             console.log("Correct!");
+            //emit event listener to trigger animatons
+            triviaContext.emit("userGuess", true);
         } else {
             console.log(
                 "Wrong Answer! Correct Answer: ",
+                //emit event listener to trigger animatons
                 triviaContext.trivia.results[questionCount].correct_answer,
                 "You selected: ",
                 selectedAnswer
             );
+            //Call event listener
+            triviaContext.emit("userGuess", false);
         }
-        setQustionCount(questionCount + 1);
+
+        //Check question count and reset if needed.
+        if (questionCount >= 9) {
+            setQustionCount(0);
+            setStartQuiz(false);
+            triviaContext.GetNewQuestions();
+        } else {
+            setQustionCount(questionCount + 1);
+        }
     }
 
     function BooleanLayout() {
         return (
             <div className="flex flex-row gap-4 items-center justify-center flex-grow">
-                <button
-                    onClick={() => AnswerSelected("True")}
-                    className="font-kanit text-3xl w-1/2 h-20 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
-                >
-                    True
-                </button>
-                <button
-                    onClick={() => AnswerSelected("False")}
-                    className="font-kanit text-3xl w-1/2 h-20 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
-                >
-                    False
-                </button>
+                {possibleAnswers.map((answer, index) => {
+                    return (
+                        <AnswerBtn
+                            key={index}
+                            action={AnswerSelected}
+                            answer={index == 0 ? "True" : "False"}
+                            color={colours[index]}
+                        />
+                    );
+                })}
             </div>
         );
     }
@@ -114,32 +134,16 @@ function QuestionContainer(props) {
         return (
             <div className="flex flex-col gap-4 items-center justify-center flex-grow">
                 <div className="flex flex-row items-center justify-center w-full gap-4">
-                    <button
-                        onClick={() => AnswerSelected([possibleAnswers[0]])}
-                        className="font-kanit text-3xl w-1/2 h-20 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
-                    >
-                        {possibleAnswers[0]}
-                    </button>
-                    <button
-                        onClick={() => AnswerSelected([possibleAnswers[1]])}
-                        className="font-kanit text-3xl w-1/2 h-20 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
-                    >
-                        {possibleAnswers[1]}
-                    </button>
-                </div>
-                <div className="flex flex-row items-center justify-center w-full gap-4">
-                    <button
-                        onClick={() => AnswerSelected([possibleAnswers[2]])}
-                        className="font-kanit text-3xl w-1/2 h-20 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-                    >
-                        {possibleAnswers[2]}
-                    </button>
-                    <button
-                        onClick={() => AnswerSelected([possibleAnswers[3]])}
-                        className="font-kanit text-3xl w-1/2 h-20 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"
-                    >
-                        {possibleAnswers[3]}
-                    </button>
+                    {possibleAnswers.map((answer, index) => {
+                        return (
+                            <AnswerBtn
+                                key={index}
+                                action={AnswerSelected}
+                                answer={replaceEntity(possibleAnswers[index])}
+                                color={colours[index]}
+                            />
+                        );
+                    })}
                 </div>
             </div>
         );

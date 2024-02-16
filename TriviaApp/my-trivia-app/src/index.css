@@ -9,3 +9,17 @@
 * {
     font-family: "Anta";
 }
+
+.animate-slide-in-out {
+    animation: slide-in-out 1.5s infinite;
+}
+
+@keyframes slide-in-out {
+    0%,
+    100% {
+        transform: translateY(100%);
+    }
+    50% {
+        transform: translateY(0);
+    }
+}
