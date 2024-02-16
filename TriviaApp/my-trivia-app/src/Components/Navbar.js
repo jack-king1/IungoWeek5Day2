@@ -7,7 +7,6 @@ function Navbar() {
             <div className="flex flex-row gap-4 text-white text-3xl">
                 <div>Home</div>
                 <div>Games</div>
-
                 <div>Contact</div>
             </div>
         </div>

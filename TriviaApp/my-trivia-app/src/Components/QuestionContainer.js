@@ -8,6 +8,7 @@ function QuestionContainer(props) {
     const [questionCount, setQustionCount] = useState(0);
     const [baseTrivia, setBaseTrivia] = useState(null);
     const [possibleAnswers, setPossibleAnswers] = useState([]);
+    const [score, setScore] = useState(0);
 
     const colours = ["green", "red", "blue", "yellow"];
 
@@ -31,12 +32,13 @@ function QuestionContainer(props) {
     }, [questionCount]);
 
     function StartQuiz() {
+        setScore(0);
         setStartQuiz(true);
     }
 
     function StartScreen() {
         return (
-            <div className="flex justify-center items-center flex-col gap-10">
+            <div className="flex justify-center items-center flex-col gap-10 my-auto">
                 <div className="text-6xl font-kanit">
                     Welcome To Trivia Night!
                 </div>
@@ -91,6 +93,7 @@ function QuestionContainer(props) {
             console.log("Correct!");
             //emit event listener to trigger animatons
             triviaContext.emit("userGuess", true);
+            setScore(score + 1);
         } else {
             console.log(
                 "Wrong Answer! Correct Answer: ",
@@ -153,8 +156,9 @@ function QuestionContainer(props) {
         return (
             <div className="w-full h-full flex flex-col">
                 <div className="grid grid-cols-4 gap-2"></div>
-                <div className="col-span-4 text-start text-2xl">
+                <div className="col-span-4 text-start text-2xl flex justify-between">
                     {triviaContext.trivia.results[questionCount].category}
+                    <div>Score: {score}</div>
                 </div>
                 <div className="col-span-4 text-5xl pt-4 text-center">
                     {replaceEntity(
