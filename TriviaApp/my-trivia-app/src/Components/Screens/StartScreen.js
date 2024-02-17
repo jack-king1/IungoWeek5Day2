@@ -1,13 +1,13 @@
 import React from "react";
 
-export default function StartScreen(props) {
+function StartScreen(props) {
     return (
         <div className="flex justify-center items-center flex-col my-auto">
             <div className="text-6xl font-kanit mb-4">
                 Welcome To Trivia Night!
             </div>
             <button
-                onClick={props.action}
+                onClick={() => props.action()}
                 className="font-kanit text-3xl w-2/3 h-20 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             >
                 Start Game
@@ -18,3 +18,5 @@ export default function StartScreen(props) {
         </div>
     );
 }
+
+export default StartScreen;

@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import { fetchTrivia } from "../API/TriviaAPI";
-import QuestionItem from "./QuestionItem";
 import QuestionContainer from "./QuestionContainer";
 import { TriviaContext } from "../TriviaContexts";
 

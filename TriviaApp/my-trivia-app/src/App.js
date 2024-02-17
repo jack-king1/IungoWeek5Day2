@@ -1,5 +1,5 @@
 import Layout from "./Components/Layout";
-import ScreenOverlay from "./Components/ScreenOverlay";
+import ScreenOverlay from "./Components/Animations/ScreenOverlay";
 import logo from "./logo.svg";
 
 function App() {

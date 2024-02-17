@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { TriviaContext } from "../TriviaContexts";
+import { TriviaContext } from "../../TriviaContexts";
 
 function ScreenOverlay() {
     const triviaContext = useContext(TriviaContext);
