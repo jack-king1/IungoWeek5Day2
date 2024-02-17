@@ -13,8 +13,13 @@ export const TriviaProvider = ({ children }) => {
     const [possibleAnswers, setPossibleAnswers] = useState([]);
     const [eventListeners, setEventListeners] = useState({});
     const [score, setScore] = useState(0);
-    const totalQuestionsAmount = 20;
+    const totalQuestionsAmount = 10;
     const [gameState, SetGameState] = useState("START");
+
+    //timers
+
+    const maxTimer = 20;
+    const [timeLeft, setTimeLeft] = useState(maxTimer);
 
     const GAME_STATES = { START: "START", GAME: "GAME", END: "END" };
 
@@ -58,11 +63,12 @@ export const TriviaProvider = ({ children }) => {
     useEffect(() => {
         SetGameState("START");
         ConfigurePossibleAnswers();
-        setPlayerQuestionCount(0);
     }, [reloaded]);
 
     function PlayAgain() {
         GetNewQuestions();
+        SetGameState("START");
+        setPlayerQuestionCount(0);
     }
 
     function GetNewQuestions() {
@@ -81,6 +87,10 @@ export const TriviaProvider = ({ children }) => {
 
         // Call the async function
         fetchData();
+    }
+
+    function TimeOut() {
+        UserGuess("TIMERANOUT!!!!!!");
     }
 
     // Function to subscribe to an event
@@ -126,21 +136,23 @@ export const TriviaProvider = ({ children }) => {
     }
 
     function UserGuess(guess) {
-        if (guess == decodeHtml(GetCurrentQuestion().correct_answer)) {
+        let decoded = decodeHtml(GetCurrentQuestion().correct_answer); //remove all funny chars
+
+        if (guess == decoded) {
             console.log("Correct!");
             //emit event listener to trigger animatons
-            emit("userGuess", true);
+            emit("userGuess", [true, guess]);
             setScore(score + 1);
         } else {
             console.log(
                 "Wrong Answer! Correct Answer: ",
                 //emit event listener to trigger animatons
-                decodeHtml(GetCurrentQuestion().correct_answer),
+                decoded,
                 "You selected: ",
                 guess
             );
             //Call event listener
-            emit("userGuess", false);
+            emit("userGuess", [false, decoded]);
         }
         //check player question count vs totalQuestions and take to end game screen.
         if (playerQuestionCount == totalQuestionsAmount - 1) {
@@ -182,15 +194,17 @@ export const TriviaProvider = ({ children }) => {
         score,
         GAME_STATES,
         gameState,
+        maxTimer,
         GetPossibleAnswers,
         GetCurrentQuestion,
         GetNewQuestions,
         subscribe,
-        emit,
         decodeHtml,
         UserGuess,
         PlayAgain,
         SetGameState,
+        TimeOut,
+        setTimeLeft,
     };
 
     return (

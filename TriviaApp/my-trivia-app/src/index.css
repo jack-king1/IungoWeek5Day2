@@ -11,15 +11,21 @@
 }
 
 .animate-slide-in-out {
-    animation: slide-in-out 1.5s infinite;
+    animation: slide-in-out 2s;
 }
 
 @keyframes slide-in-out {
-    0%,
-    100% {
+    0% {
         transform: translateY(100%);
     }
-    50% {
+
+    30% {
         transform: translateY(0);
+    }
+    80% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(100%);
     }
 }

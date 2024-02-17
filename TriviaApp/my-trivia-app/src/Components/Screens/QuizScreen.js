@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { TriviaContext } from "../../TriviaContexts";
 import BooleanLayout from "../Questions/BooleanLayout";
 import MultipleLayout from "../Questions/MultipleLayout";
+import TimerBar from "../TimerBar";
 
 function QuizScreen(props) {
     const triviaContext = useContext(TriviaContext);
@@ -12,7 +13,7 @@ function QuizScreen(props) {
             <div className="grid grid-cols-4 gap-2"></div>
             <div className="col-span-4 text-start text-2xl flex justify-between mb-6">
                 <div className="text-4xl">
-                    Q:{triviaContext.playerQuestionCount}{" "}
+                    Q:{triviaContext.playerQuestionCount + 1}{" "}
                     {triviaContext.GetCurrentQuestion().category}
                 </div>
                 <div className="text-3xl font-bold">
@@ -29,6 +30,12 @@ function QuizScreen(props) {
             ) : (
                 <MultipleLayout colors={props.colours} />
             )}
+            <div>
+                <TimerBar
+                    action={triviaContext.TimeOut}
+                    maxTime={triviaContext.maxTimer}
+                />
+            </div>
         </div>
     );
 }
