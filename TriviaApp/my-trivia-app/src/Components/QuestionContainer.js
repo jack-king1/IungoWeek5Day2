@@ -4,6 +4,7 @@ import StartScreen from "./Screens/StartScreen";
 import BooleanLayout from "./Questions/BooleanLayout";
 import MultipleLayout from "./Questions/MultipleLayout";
 import QuizScreen from "./Screens/QuizScreen";
+import EndGameScreen from "./Screens/EndGameScreen";
 
 function QuestionContainer(props) {
     const triviaContext = useContext(TriviaContext);
@@ -12,34 +13,32 @@ function QuestionContainer(props) {
     const colours = ["green", "red", "blue", "yellow"];
 
     function StartQuiz() {
-        setStartQuiz(true);
+        triviaContext.SetGameState("GAME");
     }
 
-    function AnswerSelected(selectedAnswer) {
-        //Check if answer was correct
-        //Check question count and reset if needed.
-        // if (questionCount >= triviaContext.questionCount) {
-        //     setQustionCount(0);
-        //     setStartQuiz(false);
-        //     triviaContext.GetNewQuestions();
-        // } else {
-        //     setQustionCount(questionCount + 1);
-        // }
+    function GetScreen() {
+        switch (triviaContext.gameState) {
+            case "START":
+                return <StartScreen action={StartQuiz} />;
+
+            case "GAME":
+                return <QuizScreen colours={colours} />;
+            case "END":
+                return <EndGameScreen />;
+            default:
+                break;
+        }
     }
 
     return (
         <div
             className={`text-white flex h-full ${
-                !startQuiz ? "justify-center items-center" : "justify-start"
+                triviaContext != "GAME"
+                    ? "justify-center items-center"
+                    : "justify-start"
             }`}
         >
-            {triviaContext.loaded ? (
-                !startQuiz ? (
-                    <StartScreen action={StartQuiz} />
-                ) : (
-                    <QuizScreen colours={colours} />
-                )
-            ) : null}
+            {GetScreen()}
         </div>
     );
 }

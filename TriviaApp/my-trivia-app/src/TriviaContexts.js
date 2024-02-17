@@ -14,6 +14,9 @@ export const TriviaProvider = ({ children }) => {
     const [eventListeners, setEventListeners] = useState({});
     const [score, setScore] = useState(0);
     const totalQuestionsAmount = 20;
+    const [gameState, SetGameState] = useState("START");
+
+    const GAME_STATES = { START: "START", GAME: "GAME", END: "END" };
 
     useEffect(() => {
         // Define an async function inside the useEffect
@@ -40,6 +43,7 @@ export const TriviaProvider = ({ children }) => {
             );
             ConfigurePossibleAnswers();
             setLoaded(true);
+            setScore(0);
         } catch {
             console.log("Trivia is probably empty array.");
         }
@@ -50,7 +54,16 @@ export const TriviaProvider = ({ children }) => {
         ConfigurePossibleAnswers();
     }, [playerQuestionCount]);
 
-    function PlayAgain() {}
+    //when the player wants to play again, on ready to reload, take player to start menu.
+    useEffect(() => {
+        SetGameState("START");
+        ConfigurePossibleAnswers();
+        setPlayerQuestionCount(0);
+    }, [reloaded]);
+
+    function PlayAgain() {
+        GetNewQuestions();
+    }
 
     function GetNewQuestions() {
         setLoaded(false);
@@ -103,10 +116,13 @@ export const TriviaProvider = ({ children }) => {
             ];
 
             shuffledAnswers.map(decodeHtml);
+            shuffledAnswers.sort(() => Math.random() - 0.5);
 
             console.log("Shuffled Answers: ", shuffledAnswers);
             setPossibleAnswers(shuffledAnswers);
-        } catch {}
+        } catch {
+            console.log("broken!");
+        }
     }
 
     function UserGuess(guess) {
@@ -128,7 +144,7 @@ export const TriviaProvider = ({ children }) => {
         }
         //check player question count vs totalQuestions and take to end game screen.
         if (playerQuestionCount == totalQuestionsAmount - 1) {
-            console.log("LIMIT REACHED GO TO END SCREEN!!!");
+            SetGameState("END");
         } else {
             setPlayerQuestionCount(playerQuestionCount + 1);
         }
@@ -164,6 +180,8 @@ export const TriviaProvider = ({ children }) => {
         reloaded,
         playerQuestionCount,
         score,
+        GAME_STATES,
+        gameState,
         GetPossibleAnswers,
         GetCurrentQuestion,
         GetNewQuestions,
@@ -172,6 +190,7 @@ export const TriviaProvider = ({ children }) => {
         decodeHtml,
         UserGuess,
         PlayAgain,
+        SetGameState,
     };
 
     return (
