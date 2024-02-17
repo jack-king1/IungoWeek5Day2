@@ -1,7 +1,7 @@
-export const fetchTrivia = async () => {
+export const fetchTrivia = async (amount) => {
     try {
         const response = await fetch(
-            "https://opentdb.com/api.php?amount=10"
+            `https://opentdb.com/api.php?amount=${amount}`
         ).then((res) => res.json());
         console.log("@NFETCHUSERS: ", response);
         return response; // Returning an array of user items

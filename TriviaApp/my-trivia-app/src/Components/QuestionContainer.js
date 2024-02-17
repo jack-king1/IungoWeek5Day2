@@ -21,7 +21,7 @@ function QuestionContainer(props) {
         }
 
         if (triviaContext.reloaded) {
-            console.log("fetching new questioms...");
+            console.log("fetching new questions...");
             SetPossibleAnswers();
         }
     }, [triviaContext]);
@@ -38,8 +38,8 @@ function QuestionContainer(props) {
 
     function StartScreen() {
         return (
-            <div className="flex justify-center items-center flex-col gap-10 my-auto">
-                <div className="text-6xl font-kanit">
+            <div className="flex justify-center items-center flex-col my-auto">
+                <div className="text-6xl font-kanit mb-4">
                     Welcome To Trivia Night!
                 </div>
                 <button
@@ -56,32 +56,26 @@ function QuestionContainer(props) {
     }
 
     function SetPossibleAnswers() {
-        if (
-            triviaContext.trivia == undefined ||
-            triviaContext.trivia.length <= 0
-        ) {
-            console.log("Trivia seems to be undefined: ", triviaContext);
-            return;
-        }
-        console.log("Context before setting answers: ", triviaContext);
-        let shuffledAnswers =
-            triviaContext.trivia.results[questionCount].incorrect_answers;
-        shuffledAnswers = [
-            ...shuffledAnswers,
-            triviaContext.trivia.results[questionCount].correct_answer,
-        ];
+        try {
+            console.log("Context before setting answers: ", triviaContext);
+            let shuffledAnswers =
+                triviaContext.trivia.results[questionCount].incorrect_answers;
+            shuffledAnswers = [
+                ...shuffledAnswers,
+                triviaContext.trivia.results[questionCount].correct_answer,
+            ];
 
-        shuffledAnswers.map(replaceEntity);
-        setPossibleAnswers(shuffledAnswers);
+            shuffledAnswers.map(decodeHtml);
+            setPossibleAnswers(shuffledAnswers);
+        } catch {
+            console.log("Service Unavailable...");
+        }
     }
 
-    function replaceEntity(string) {
-        let newString = string.replace(
-            /^&#039;|&#039;$|&quot;|&#039;|&#039/g,
-            ""
-        );
-        let newString2 = newString.replace("&eacute;", "e");
-        return newString2;
+    function decodeHtml(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
     }
 
     function AnswerSelected(selectedAnswer) {
@@ -107,7 +101,7 @@ function QuestionContainer(props) {
         }
 
         //Check question count and reset if needed.
-        if (questionCount >= 9) {
+        if (questionCount >= triviaContext.questionCount) {
             setQustionCount(0);
             setStartQuiz(false);
             triviaContext.GetNewQuestions();
@@ -136,13 +130,13 @@ function QuestionContainer(props) {
     function MultipleLayout() {
         return (
             <div className="flex flex-col gap-4 items-center justify-center flex-grow">
-                <div className="flex flex-row items-center justify-center w-full gap-4">
+                <div className="grid grid-cols-4 items-center justify-center w-full gap-4">
                     {possibleAnswers.map((answer, index) => {
                         return (
                             <AnswerBtn
                                 key={index}
                                 action={AnswerSelected}
-                                answer={replaceEntity(possibleAnswers[index])}
+                                answer={decodeHtml(possibleAnswers[index])}
                                 color={colours[index]}
                             />
                         );
@@ -156,12 +150,14 @@ function QuestionContainer(props) {
         return (
             <div className="w-full h-full flex flex-col">
                 <div className="grid grid-cols-4 gap-2"></div>
-                <div className="col-span-4 text-start text-2xl flex justify-between">
-                    {triviaContext.trivia.results[questionCount].category}
-                    <div>Score: {score}</div>
+                <div className="col-span-4 text-start text-2xl flex justify-between mb-6">
+                    <div className="text-4xl">
+                        {triviaContext.trivia.results[questionCount].category}
+                    </div>
+                    <div className="text-3xl font-bold">Score: {score}</div>
                 </div>
                 <div className="col-span-4 text-5xl pt-4 text-center">
-                    {replaceEntity(
+                    {decodeHtml(
                         triviaContext.trivia.results[questionCount].question
                     )}
                 </div>

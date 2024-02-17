@@ -14,13 +14,14 @@ export const TriviaProvider = ({ children }) => {
         guess: false,
     });
     const [eventListeners, setEventListeners] = useState({});
+    const questionCount = 20;
 
     useEffect(() => {
         // Define an async function inside the useEffect
         setLoaded(false);
         async function fetchData() {
             try {
-                const response = await fetchTrivia();
+                const response = await fetchTrivia(questionCount);
                 // Do something with the data
                 console.log(response);
                 setTrivia(response);
@@ -42,7 +43,7 @@ export const TriviaProvider = ({ children }) => {
         setLoaded(false);
         async function fetchData() {
             try {
-                const response = await fetchTrivia();
+                const response = await fetchTrivia(questionCount);
                 // Do something with the data
                 console.log(response);
                 setTrivia(response);
@@ -77,6 +78,7 @@ export const TriviaProvider = ({ children }) => {
         trivia,
         loaded,
         reloaded,
+        questionCount,
         GetNewQuestions,
         subscribe,
         emit,
