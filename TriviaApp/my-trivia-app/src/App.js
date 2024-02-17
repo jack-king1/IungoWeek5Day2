@@ -4,7 +4,7 @@ import logo from "./logo.svg";
 
 function App() {
     return (
-        <div className="min-h-screen max-h-screen bg-homebg flex flex-row justify-center">
+        <div className="min-h-screen max-h-screen bg-homebg flex flex-row justify-center overflow-hidden">
             <Layout />
             <ScreenOverlay />
         </div>

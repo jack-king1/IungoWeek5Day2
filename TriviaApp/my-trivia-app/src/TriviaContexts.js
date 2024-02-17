@@ -13,14 +13,14 @@ export const TriviaProvider = ({ children }) => {
     const [possibleAnswers, setPossibleAnswers] = useState([]);
     const [eventListeners, setEventListeners] = useState({});
     const [score, setScore] = useState(0);
-    const totalQuestions = 20;
+    const totalQuestionsAmount = 20;
 
     useEffect(() => {
         // Define an async function inside the useEffect
         setLoaded(false);
         async function fetchData() {
             try {
-                const response = await fetchTrivia(totalQuestions);
+                const response = await fetchTrivia(totalQuestionsAmount);
                 // Do something with the data
                 console.log(response);
                 setTrivia(response);
@@ -50,11 +50,13 @@ export const TriviaProvider = ({ children }) => {
         ConfigurePossibleAnswers();
     }, [playerQuestionCount]);
 
+    function PlayAgain() {}
+
     function GetNewQuestions() {
         setLoaded(false);
         async function fetchData() {
             try {
-                const response = await fetchTrivia(totalQuestions);
+                const response = await fetchTrivia(totalQuestionsAmount);
                 // Do something with the data
                 console.log(response);
                 setTrivia(response);
@@ -108,7 +110,7 @@ export const TriviaProvider = ({ children }) => {
     }
 
     function UserGuess(guess) {
-        if (guess == GetCurrentQuestion().correct_answer) {
+        if (guess == decodeHtml(GetCurrentQuestion().correct_answer)) {
             console.log("Correct!");
             //emit event listener to trigger animatons
             emit("userGuess", true);
@@ -117,24 +119,42 @@ export const TriviaProvider = ({ children }) => {
             console.log(
                 "Wrong Answer! Correct Answer: ",
                 //emit event listener to trigger animatons
-                GetCurrentQuestion().correct_answer,
+                decodeHtml(GetCurrentQuestion().correct_answer),
                 "You selected: ",
                 guess
             );
             //Call event listener
             emit("userGuess", false);
         }
-        setPlayerQuestionCount(playerQuestionCount + 1);
+        //check player question count vs totalQuestions and take to end game screen.
+        if (playerQuestionCount == totalQuestionsAmount - 1) {
+            console.log("LIMIT REACHED GO TO END SCREEN!!!");
+        } else {
+            setPlayerQuestionCount(playerQuestionCount + 1);
+        }
     }
 
     function GetCurrentQuestion() {
-        console.log("Getting Question: ", trivia.results[playerQuestionCount]);
-        return trivia.results[playerQuestionCount];
+        console.log(
+            "Getting Question: ",
+            trivia.results[playerQuestionCount],
+            "Count: ",
+            playerQuestionCount
+        );
+        try {
+            return trivia.results[playerQuestionCount];
+        } catch {
+            return trivia.results[0];
+        }
     }
 
     function GetPossibleAnswers() {
-        console.log("Getting Answers: ", possibleAnswers);
-        return possibleAnswers;
+        try {
+            console.log("Getting Answers: ", possibleAnswers);
+            return possibleAnswers;
+        } catch {
+            return ["Im Gay", "You're Gay", "Were Gay", "No ones gay!"];
+        }
     }
 
     // Value provided by the AuthContext
@@ -143,6 +163,7 @@ export const TriviaProvider = ({ children }) => {
         loaded,
         reloaded,
         playerQuestionCount,
+        score,
         GetPossibleAnswers,
         GetCurrentQuestion,
         GetNewQuestions,
@@ -150,6 +171,7 @@ export const TriviaProvider = ({ children }) => {
         emit,
         decodeHtml,
         UserGuess,
+        PlayAgain,
     };
 
     return (

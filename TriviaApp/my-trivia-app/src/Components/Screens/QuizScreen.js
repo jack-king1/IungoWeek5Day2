@@ -14,7 +14,9 @@ function QuizScreen(props) {
                 <div className="text-4xl">
                     {triviaContext.GetCurrentQuestion().category}
                 </div>
-                <div className="text-3xl font-bold">Score: {0}</div>
+                <div className="text-3xl font-bold">
+                    Score: {triviaContext.score}
+                </div>
             </div>
             <div className="col-span-4 text-5xl pt-4 text-center">
                 {triviaContext.decodeHtml(
