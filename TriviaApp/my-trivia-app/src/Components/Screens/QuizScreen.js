@@ -12,6 +12,7 @@ function QuizScreen(props) {
             <div className="grid grid-cols-4 gap-2"></div>
             <div className="col-span-4 text-start text-2xl flex justify-between mb-6">
                 <div className="text-4xl">
+                    Q:{triviaContext.playerQuestionCount}{" "}
                     {triviaContext.GetCurrentQuestion().category}
                 </div>
                 <div className="text-3xl font-bold">
