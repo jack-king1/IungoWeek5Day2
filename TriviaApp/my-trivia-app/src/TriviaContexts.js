@@ -13,8 +13,9 @@ export const TriviaProvider = ({ children }) => {
     const [possibleAnswers, setPossibleAnswers] = useState([]);
     const [eventListeners, setEventListeners] = useState({});
     const [score, setScore] = useState(0);
-    const totalQuestionsAmount = 10;
+    const totalQuestionsAmount = 2;
     const [gameState, SetGameState] = useState("START");
+    const [playerName, setPlayerName] = useState("");
 
     //timers
 
@@ -185,6 +186,9 @@ export const TriviaProvider = ({ children }) => {
         }
     }
 
+    function PlayerName(name) {
+        setPlayerName(name);
+    }
     // Value provided by the AuthContext
     const triviaContextValue = {
         trivia,
@@ -195,6 +199,7 @@ export const TriviaProvider = ({ children }) => {
         GAME_STATES,
         gameState,
         maxTimer,
+        playerName,
         GetPossibleAnswers,
         GetCurrentQuestion,
         GetNewQuestions,
@@ -205,6 +210,7 @@ export const TriviaProvider = ({ children }) => {
         SetGameState,
         TimeOut,
         setTimeLeft,
+        PlayerName,
     };
 
     return (

@@ -12,8 +12,9 @@ function QuestionContainer(props) {
 
     const colours = ["green", "red", "blue", "yellow"];
 
-    function StartQuiz() {
+    function StartQuiz(playerName) {
         triviaContext.SetGameState("GAME");
+        triviaContext.PlayerName(playerName);
     }
 
     function GetScreen() {
