@@ -13,7 +13,7 @@ export const TriviaProvider = ({ children }) => {
     const [possibleAnswers, setPossibleAnswers] = useState([]);
     const [eventListeners, setEventListeners] = useState({});
     const [score, setScore] = useState(0);
-    const totalQuestionsAmount = 2;
+    const totalQuestionsAmount = 10;
     const [gameState, SetGameState] = useState("START");
     const [playerName, setPlayerName] = useState("");
 

@@ -25,9 +25,14 @@ function EndGameScreen() {
             });
             //push new player and sort array, then pop the last place.
             newleaderboard.sort((a, b) => b.score - a.score);
-            newleaderboard.pop();
+
+            if (newleaderboard.length > 3) {
+                newleaderboard.pop();
+                console.log(newleaderboard.length);
+            }
+
             setLeaderboard(newleaderboard);
-            JSON.stringify(localStorage.setItem("leaderboard", newleaderboard));
+            localStorage.setItem("leaderboard", JSON.stringify(newleaderboard));
         } else {
             //if leaderboard doesnt exist, create a new one and set player as highscore.
             let newLeaderboard = [
